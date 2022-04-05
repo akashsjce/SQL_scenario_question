@@ -1,0 +1,84 @@
+Question 2
+
+                                ------------------------------
+                                      PROBLEM STATEMENT 
+                                      
+                        Write a SQL query to find the maximum and minimum values of continuous ‘Sequence’ in each ‘Group’ 
+                                      
+                                ------------------------------
+
+
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
+CREATE TABLE Emp1(
+Group1  varchar(20),
+Sequence  int );
+
+INSERT INTO Emp VALUES('A',1);
+INSERT INTO Emp VALUES('A',2);
+INSERT INTO Emp VALUES('A',3);
+INSERT INTO Emp VALUES('A',5);
+INSERT INTO Emp VALUES('A',6);
+INSERT INTO Emp VALUES('A',8);
+INSERT INTO Emp VALUES('A',9);
+INSERT INTO Emp VALUES('B',11);
+INSERT INTO Emp VALUES('C',1);
+INSERT INTO Emp VALUES('C',2);
+INSERT INTO Emp VALUES('C',3);
+
+
+
+                              ------------------------------
+                                solution_1 5/4/2022
+                              ------------------------------
+------------------------------
+Method 1: windows function with subquery 
+------------------------------
+
+select 
+Group1,
+min(sequence) as mini,
+max(sequence) as maxi
+from
+(
+	select 
+	group1,
+    sequence,
+	sequence-rk as rk1
+	from
+	(
+	select *,
+	Row_Number() over( partition by Group1 order by sequence) as rk
+	from Emp
+	)t
+)t1
+group by Group1,rk1
+order by group1;
+
+------------------------------
+Method 2: windows function with CTE 
+------------------------------
+with cte as
+(
+	select 
+	Group1,
+    sequence,
+	sequence-rk as rk1
+    from
+    (
+    select *,
+    Row_Number() over( partition by Group1 order by sequence) as rk
+	from
+	Emp
+    )t
+)
+select 
+Group1,
+min(sequence) as mini,
+max(sequence) as maxi
+from
+cte
+group by Group1,rk
+order by group1;
+
