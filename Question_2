@@ -27,6 +27,21 @@ INSERT INTO Emp VALUES('C',1);
 INSERT INTO Emp VALUES('C',2);
 INSERT INTO Emp VALUES('C',3);
 
++--------+----------+
+| Group1 | Sequence |
++--------+----------+
+| A      |        1 |
+| A      |        2 |
+| A      |        3 |
+| A      |        5 |
+| A      |        6 |
+| A      |        8 |
+| A      |        9 |
+| B      |       11 |
+| C      |        1 |
+| C      |        2 |
+| C      |        3 |
++--------+----------+
 
 
                               ------------------------------
