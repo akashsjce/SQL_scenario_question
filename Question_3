@@ -1,0 +1,64 @@
+Question 3
+
+                                ------------------------------
+                                      PROBLEM STATEMENT 
+                                      
+               Student Table has three columns Student_Name, Total_Marks and Year. User has to write a SQL query to display Student_Name, 
+               Total_Marks, Year,  Prev_Yr_Marks for those whose Total_Marks are greater than or equal to the previous year.      
+						
+                                ------------------------------
+
+
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
+CREATE TABLE Student_3(
+Student_Name  varchar(30),
+Total_Marks  int ,
+Year  int)
+
+INSERT INTO Student_3 VALUES ('Rahul',90,2010);
+INSERT INTO Student_3 VALUES('Sanjay',80,2010);
+INSERT INTO Student_3 VALUES('Mohan',70,2010);
+INSERT INTO Student_3 VALUES('Rahul',90,2011);
+INSERT INTO Student_3 VALUES('Sanjay',85,2011);
+INSERT INTO Student_3 VALUES('Mohan',65,2011);
+INSERT INTO Student_3 VALUES('Rahul',80,2012);
+INSERT INTO Student_3 VALUES('Sanjay',80,2012);
+INSERT INTO Student_3 VALUES('Mohan',90,2012);
+
++--------------+-------------+------+
+| Student_name | total_marks | year |
++--------------+-------------+------+
+| Mohan        |          70 | 2010 |
+| Mohan        |          65 | 2011 |
+| Mohan        |          90 | 2012 |
+| Rahul        |          90 | 2010 |
+| Rahul        |          90 | 2011 |
+| Rahul        |          80 | 2012 |
+| Sanjay       |          80 | 2010 |
+| Sanjay       |          85 | 2011 |
+| Sanjay       |          80 | 2012 |
++--------------+-------------+------+
+
+
+
+                              ------------------------------
+                                solution_1 6/4/2022
+                              ------------------------------
+------------------------------
+Method 1: windows function with CTE 
+------------------------------
+with cte as(
+select 
+Student_name,
+total_marks,
+lag(total_marks) over(partition by Student_name) as pre,
+year 
+from Student_3 
+order by student_name
+)
+select student_name,total_marks,year,pre
+from cte
+where total_marks>=pre
+;
