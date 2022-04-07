@@ -1,0 +1,75 @@
+Question 4
+
+                                ------------------------------
+                                      PROBLEM STATEMENT 
+                                      
+                        Emp_Details  Table has four columns EmpID, Gender, EmailID and DeptID. User has to write a SQL query to
+                        derive another column called Email_List to display all Emailid concatenated with semicolon associated with 
+                        a each DEPT_ID  as shown below in output Table.     
+						
+                                ------------------------------
+
+
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
+CREATE TABLE Emp_Details_4 (
+EMPID int,
+Gender varchar(20),
+EmailID varchar(30),
+DeptID int);
+
+
+INSERT INTO Emp_Details_4 VALUES (1001,'M','YYYYY@gmaix.com',104);
+INSERT INTO Emp_Details_4 VALUES (1002,'M','ZZZ@gmaix.com',103);
+INSERT INTO Emp_Details_4 VALUES (1003,'F','AAAAA@gmaix.com',102);
+INSERT INTO Emp_Details_4 VALUES (1004,'F','PP@gmaix.com',104);
+INSERT INTO Emp_Details_4 VALUES (1005,'M','CCCC@yahu.com',101);
+INSERT INTO Emp_Details_4 VALUES (1006,'M','DDDDD@yahu.com',100);
+INSERT INTO Emp_Details_4 VALUES (1007,'F','E@yahu.com',102);
+INSERT INTO Emp_Details_4 VALUES (1008,'M','M@yahu.com',102);
+INSERT INTO Emp_Details_4 VALUES (1009,'F','SS@yahu.com',100);
+
+INPUT
+
++-------+--------+-----------------+--------+
+| EMPID | Gender | EmailID         | DeptID |
++-------+--------+-----------------+--------+
+|  1001 | M      | YYYYY@gmaix.com |    104 |
+|  1002 | M      | ZZZ@gmaix.com   |    103 |
+|  1003 | F      | AAAAA@gmaix.com |    102 |
+|  1004 | F      | PP@gmaix.com    |    104 |
+|  1005 | M      | CCCC@yahu.com   |    101 |
+|  1006 | M      | DDDDD@yahu.com  |    100 |
+|  1007 | F      | E@yahu.com      |    102 |
+|  1008 | M      | M@yahu.com      |    102 |
+|  1009 | F      | SS@yahu.com     |    100 |
++-------+--------+-----------------+--------+
+
+
+OUTPUT
+
++-----------------------------------------+
+| email_list                              |
++-----------------------------------------+
+| DDDDD@yahu.com; SS@yahu.com             |
+| CCCC@yahu.com                           |
+| AAAAA@gmaix.com; E@yahu.com; M@yahu.com |
+| ZZZ@gmaix.com                           |
+| YYYYY@gmaix.com; PP@gmaix.com           |
++-----------------------------------------+
+
+
+
+                              ------------------------------
+                                solution_4 7/4/2022
+                              ------------------------------
+------------------------------
+Method 1: GROUP_CONCAT
+------------------------------
+select 
+group_Concat(EmailID SEPARATOR'; ') 
+from Emp_Details_4 
+group by DeptId;
+
+
