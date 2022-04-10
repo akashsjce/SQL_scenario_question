@@ -1,0 +1,147 @@
+Question 6
+
+                                ------------------------------
+                                      PROBLEM STATEMENT 
+                                      
+                        Order_Tbl has four columns namely ORDER_DAY, ORDER_ID, PRODUCT_ID, QUANTITY and PRICE
+						Problem Statements :-
+						(a) Write a SQL to get the highest sold Products (Quantity*Price) on both the days 
+						(b) Write a SQL to get all product's  total sales on 1st May and 2nd May adjacent to each other
+						(c) Write a SQL to get all products day wise, that was ordered more than once
+						
+                                ------------------------------
+
+
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
+CREATE TABLE Order_Tb_5(
+ ORDER_DAY date,
+ ORDER_ID varchar(10) ,
+ PRODUCT_ID varchar(10) ,
+ QUANTITY int ,
+ PRICE int 
+);
+
+
+
+INSERT INTO Order_Tb_5  VALUES ('2015-05-01','ODR1', 'PROD1', 5, 5);
+INSERT INTO Order_Tb_5  VALUES ('2015-05-01','ODR2', 'PROD2', 2, 10);
+INSERT INTO Order_Tb_5  VALUES ('2015-05-01','ODR3', 'PROD3', 10, 25);
+INSERT INTO Order_Tb_5  VALUES ('2015-05-01','ODR4', 'PROD1', 20, 5);
+INSERT INTO Order_Tb_5  VALUES ('2015-05-02','ODR5', 'PROD3', 5, 25);
+INSERT INTO Order_Tb_5  VALUES ('2015-05-02','ODR6', 'PROD4', 6, 20);
+INSERT INTO Order_Tb_5  VALUES ('2015-05-02','ODR7', 'PROD1', 2, 5);
+INSERT INTO Order_Tb_5  VALUES ('2015-05-02','ODR8', 'PROD5', 1, 50);
+INSERT INTO Order_Tb_5  VALUES ('2015-05-02','ODR9', 'PROD6', 2, 50);
+INSERT INTO Order_Tb_5  VALUES ('2015-05-02','ODR10','PROD2', 4, 10);
+
+input table 
+
++------------+----------+------------+----------+-------+
+| ORDER_DAY  | ORDER_ID | PRODUCT_ID | QUANTITY | PRICE |
++------------+----------+------------+----------+-------+
+| 2015-05-01 | ODR1     | PROD1      |        5 |     5 |
+| 2015-05-01 | ODR2     | PROD2      |        2 |    10 |
+| 2015-05-01 | ODR3     | PROD3      |       10 |    25 |
+| 2015-05-01 | ODR4     | PROD1      |       20 |     5 |
+| 2015-05-02 | ODR5     | PROD3      |        5 |    25 |
+| 2015-05-02 | ODR6     | PROD4      |        6 |    20 |
+| 2015-05-02 | ODR7     | PROD1      |        2 |     5 |
+| 2015-05-02 | ODR8     | PROD5      |        1 |    50 |
+| 2015-05-02 | ODR9     | PROD6      |        2 |    50 |
+| 2015-05-02 | ODR10    | PROD2      |        4 |    10 |
++------------+----------+------------+----------+-------+
+
+
+
+OUTPUT
+
+A
++------------+----------+------------+----------+-------+----+
+| ORDER_DAY  | ORDER_ID | PRODUCT_ID | QUANTITY | PRICE | RK |
++------------+----------+------------+----------+-------+----+
+| 2015-05-01 | ODR3     | PROD3      |       10 |    25 |  1 |
+| 2015-05-02 | ODR5     | PROD3      |        5 |    25 |  1 |
++------------+----------+------------+----------+-------+----+
+
+B
++------------+----------+----------+
+| product_id | sales_01 | sales_02 |
++------------+----------+----------+
+| PROD1      |      125 |       10 |
+| PROD2      |       20 |       40 |
+| PROD3      |      250 |      125 |
+| PROD4      |        0 |      120 |
+| PROD5      |        0 |       50 |
+| PROD6      |        0 |      100 |
++------------+----------+----------+
+
+
+
+c
++------------+------------+-------------------+
+| ORDER_DAY  | PRODUCT_ID | count(PRODUCT_ID) |
++------------+------------+-------------------+
+| 2015-05-01 | PROD1      |                 2 |
++------------+------------+-------------------+
+
+
+
+
+
+                              ------------------------------
+                                solution_6 10/4/2022
+                              ------------------------------
+------------------------------
+Method 1: solution_6 A   Write a SQL to get the highest sold Products (Quantity*Price) on both the days 
+------------------------------
+select * from 
+(
+select *,
+Rank() over(partition by ORDER_DAY order by (QUANTITY * PRICE) desc) as RK
+from Order_Tb_5
+) t 
+where RK=1;
+
+
+------------------------------
+Method 1: solution_6 B  (b) Write a SQL to get all product's  total sales on 1st May and 2nd May adjacent to each other    
+------------------------------
+note: can solve using pivot also 
+select 
+product_id,
+sum(IFNULL(total_sale_1,0)) as sales_01,
+sum(IFNULL(total_sale_2,0)) as sales_02
+from
+(
+select
+product_id,
+case when ORDER_DAY='2015-05-01' then total_sale end as total_sale_1,
+case when ORDER_DAY='2015-05-02' then total_sale end as total_sale_2
+from
+(
+select 
+product_id,ORDER_DAY,sum(QUANTITY*PRICE) as total_sale
+from 
+Order_Tb_5
+group by product_id,ORDER_DAY
+)sub1
+)sub2
+group by product_id;
+
+------------------------------
+Method 1: solution_6 B  (c) Write a SQL to get all products day wise, that was ordered more than once
+------------------------------
+ORDER_DAY  | ORDER_ID | PRODUCT_ID | QUANTITY | PRICE
+
+select 
+ORDER_DAY,PRODUCT_ID,count(PRODUCT_ID)
+from 
+Order_Tb_5
+group by PRODUCT_ID,ORDER_DAY
+having count(*)>1;
+
+
+
+
