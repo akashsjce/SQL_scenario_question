@@ -1,0 +1,86 @@
+Question 7
+
+                                ------------------------------
+                                      PROBLEM STATEMENT 
+                                      
+								write a query to get the city name who have cases increasing three consecutive days
+						
+                                ------------------------------
+
+
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
+create table covid_6(location varchar(50),days varchar(10),cases int);
+insert into covid_6 values('DELHI','MON',100);
+insert into covid_6 values('DELHI','TUE',200);
+insert into covid_6 values('DELHI','WED',300);
+
+insert into covid_6 values('MUMBAI','MON',100);
+insert into covid_6 values('MUMBAI','TUE',100);
+insert into covid_6 values('MUMBAI','WED',300);
+
+insert into covid_6 values('CHENNAI','MON',100);
+insert into covid_6 values('CHENNAI','TUE',200);
+insert into covid_6 values('CHENNAI','WED',150);
+
+Exp o/p:
++----------+
+| location |
++----------+
+| DELHI    |
++----------+
+
+
+input table 
+
++----------+------+-------+
+| location | days | cases |
++----------+------+-------+
+| DELHI    | MON  |   100 |
+| DELHI    | TUE  |   200 |
+| DELHI    | WED  |   300 |
+| MUMBAI   | MON  |   100 |
+| MUMBAI   | TUE  |   100 |
+| MUMBAI   | WED  |   300 |
+| CHENNAI  | MON  |   100 |
+| CHENNAI  | TUE  |   200 |
+| CHENNAI  | WED  |   150 |
++----------+------+-------+
+
+
+
+
+OUTPUT
++----------+
+| location |
++----------+
+| DELHI    |
++----------+
+                              ------------------------------
+                                solution_6 11/4/2022
+                              ------------------------------
+------------------------------
+Method 1: solution_6 
+------------------------------
+with cte as
+(
+select location,
+days,
+cases,
+lead(cases) over() as next,
+lead(cases,2) over() as next_2 
+from
+covid_6
+)
+select location 
+from 
+cte
+where
+next_2>next
+and next>cases;
+
+
+
+
+
