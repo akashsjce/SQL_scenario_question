@@ -1,0 +1,93 @@
+Question 9
+            ------------------------------
+                        PROBLEM STATEMENT  9                 
+    Team Table has two columns namely ID and TeamName and it contains 4 TeamsName.
+	Write a SQL which will fetch total schedule of matches between each Team vs opposite team:
+			------------------------------
+			
+
+
+                                ------------------------------
+                                      create insert query 
+								                ------------------------------
+
+
+Create Table Team_9(
+ID INT,
+TeamName Varchar(50)
+);
+
+INSERT INTO Team_9 VALUES(1,'RCB'),(2,'CSK'),(3,'DC'),(4,'MI'),(5,'KKR'),(6,'SRH');
+
+------------------------------
+input table
+------------------------------
++------+----------+
+| ID   | TeamName |
++------+----------+
+|    1 | RCB      |
+|    2 | CSK      |
+|    3 | DC       |
+|    4 | MI       |
+|    5 | KKR      |
+|    6 | SRH      |
++------+----------+
+
+------------------------------
+Expected output :
+------------------------------
++-------+------+-------+
+| Team1 | VS   | Team2 |
++-------+------+-------+
+| RCB   |  VS  | CSK   |
+| CSK   |  VS  | DC    |
+| RCB   |  VS  | DC    |
+| DC    |  VS  | MI    |
+| CSK   |  VS  | MI    |
+| RCB   |  VS  | MI    |
+| MI    |  VS  | KKR   |
+| DC    |  VS  | KKR   |
+| CSK   |  VS  | KKR   |
+| RCB   |  VS  | KKR   |
+| KKR   |  VS  | SRH   |
+| MI    |  VS  | SRH   |
+| DC    |  VS  | SRH   |
+| CSK   |  VS  | SRH   |
+| RCB   |  VS  | SRH   |
++-------+------+-------+
+
+------------------------------
+Method 1: self join 
+------------------------------
+select 
+	A.TeamName as Team1 ,
+	' VS ' as VS ,
+	B.TeamName As Team2  
+from 
+	Team_9 A  
+join 
+	Team_9 B 
+on A.id<B.id;
+
+------------------------------
+Method 2: CTE
+------------------------------
+with CTE1 as 
+	( select * from Team_9
+	),
+CTE2 as
+	( select * from Team_9
+	)
+select 
+	A.Teamname as Team1,
+	' VS ' as VS,
+	B.TeamName as Team2
+from 
+	CTE1 A
+join
+	CTE2 B
+on A.id < B.id;
+
+
+
+Tool Used: MYSQL
