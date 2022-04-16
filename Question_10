@@ -1,0 +1,44 @@
+
+
+create table entries (
+name varchar(20),
+address varchar(20),
+email varchar(20),
+floor int,
+resources varchar(10));
+
+insert into entries
+values ('A','Bangalore','A@gmail.com',1,'CPU'),('A','Bangalore','A1@gmail.com',1,'CPU'),('A','Bangalore','A2@gmail.com',2,'DESKTOP')
+,('B','Bangalore','B@gmail.com',2,'DESKTOP'),('B','Bangalore','B1@gmail.com',2,'DESKTOP'),('B','Bangalore','B2@gmail.com',1,'MONITOR')
+
+
+with cte as
+(
+select name,
+count(address) as total_visit,
+group_concat(resources) as resources_used
+from
+ entries
+group by name,address
+)
+select 
+b.name,total_visit,b.floor,resources_used
+from
+(
+select name,floor,cou,
+rank() over(partition by name order by cou desc) as rk
+from 
+(
+select 
+name,
+floor,
+count(floor) as cou
+from 
+entries
+group by name,floor
+) a
+)b,
+cte
+where rk=1
+and b.name=cte.name
+;
