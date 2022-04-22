@@ -1,5 +1,13 @@
-write a query to find number who has done both inc & out and sum of duration of out is greater than sum of duration of inc
+SQL_scenario_question Question 11 :
+                         ------------------------------
+                           PROBLEM STATEMENT 
+       write a query to find number who has done both inc & out and sum of duration of out is greater than sum of duration of inc
+                     ------------------------------
 
+
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
 create table call_det_10 (
 call_type varchar(21),
 call_num int,
