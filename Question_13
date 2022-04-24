@@ -1,0 +1,65 @@
+Write sql query to print the country names in ascending order, but India should always come on top.
+Output:
+Country
+======
+India
+Australia
+Brazil
+England
+France
+Japan
+ 
+ 
+ create table Countries_13(Country varchar(30));
+ 
+ insert into Countries_13 values('England');
+ insert into Countries_13 values('Australia');
+ insert into Countries_13 values('India');
+ insert into Countries_13 values('Brazil');
+ insert into Countries_13 values('France');
+ insert into Countries_13 values('Japan');
+ 
+ 
+ 
+ input 
++-----------+
+| Country   |
++-----------+
+| England   |
+| Australia |
+| India     |
+| Brazil    |
+| France    |
+| Japan     |
++-----------+
+
+expected output :
++-----------+
+| Country   |
++-----------+
+| India     |
+| Australia |
+| Brazil    |
+| England   |
+| France    |
+| Japan     |
++-----------+
+
+ 
+ with cte as 
+ (
+ select *,
+ case when  country='India' then 0
+ else 1
+ end as sort
+ from 
+ Countries_13 
+ )
+ select country 
+ from cte
+ order by sort,country ;
+
+ 
+ 
+
+
