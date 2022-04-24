@@ -1,94 +1,106 @@
 SQL_scenario_question Question 11 :
                          ------------------------------
-                           PROBLEM STATEMENT 
-       write a query to find number who has done both inc & out and sum of duration of out is greater than sum of duration of inc
+				PROBLEM STATEMENT 
+				
+		11) write sql query to produce output as show below 
+		
                      ------------------------------
 
 
 -------------------------------------------------------------------------
 Table and Insert SQL Script :
 -------------------------------------------------------------------------
-create table call_det_10 (
-call_type varchar(21),
-call_num int,
-dur int);
+create table testing_11 (device_id int,location varchar(21));
 
-insert into call_det_10 values('OUT',98456,10);
-insert into call_det_10 values('OUT',98456,12);
-insert into call_det_10 values('OUT',98989,5);
-insert into call_det_10 values('INC',12121,7);
-insert into call_det_10 values('INC',98456,14);
-insert into call_det_10 values('INC',98989,8);
-insert into call_det_10 values('SMS',98456,10);
-insert into call_det_10 values('OUT',98452,12);
-insert into call_det_10 values('INC',98982,5);
+insert into testing_11 values(12,'bangalore');
+insert into testing_11 values(12,'bangalore');
+insert into testing_11 values(12,'bangalore');
+insert into testing_11 values(12,'bangalore');
+insert into testing_11 values(12,'hosur');
+insert into testing_11 values(12,'hosur');
+insert into testing_11 values(13,'hydrabad');
+insert into testing_11 values(13,'hydrabad');
+insert into testing_11 values(13,'secundrabad');
+insert into testing_11 values(13,'secundrabad');
+insert into testing_11 values(13,'secundrabad');
+
+
+input 
++-----------+-------------+
+| device_id | location    |
++-----------+-------------+
+|        12 | bangalore   |
+|        12 | bangalore   |
+|        12 | bangalore   |
+|        12 | bangalore   |
+|        12 | hosur       |
+|        12 | hosur       |
+|        13 | hydrabad    |
+|        13 | hydrabad    |
+|        13 | secundrabad |
+|        13 | secundrabad |
+|        13 | secundrabad |
++-----------+-------------+
+
+
+output
+
++-----------+--------------+-------------+
+| device_id | total_signal | location    |
++-----------+--------------+-------------+
+|        12 |            6 | bangalore   |
+|        13 |            5 | secundrabad |
++-----------+--------------+-------------+
+
 
 
 
 ans 1:
 
 
-WITH CTE_FINAL AS
-(
-	WITH CTE_IN AS(
-		select 
-		call_num,
-		call_type,
-		sum(dur) AS S_IN
-		from 
-		call_det_10
-		where call_type='INC'
-		group by call_num
-	),
-	CTE_OUT AS (
-		select 
-		call_num,
-		call_type,
-		sum(dur) AS S_OUT
-		from 
-		call_det_10
-		where call_type='out'
-		group by call_num
+with CTE2 as 
+	(
+	with CTE as
+	(
+		select device_id,count(*) as total_signal,location
+		from testing_11
+		group by device_id,location
 	)
-	SELECT CTE_OUT.call_num,
-    CTE_OUT.S_OUT,
-    CTE_IN.S_IN
-	from 
-	CTE_IN
-	JOIN
-	CTE_OUT
-	WHERE CTE_IN.CALL_NUM=CTE_OUT.CALL_NUM
- )   
-SELECT * FROM 
-CTE_FINAL
-where 
-S_OUT>S_IN 
-and 
-call_num in
-(
-SELECT 
-CALL_NUM 
-FROM 
-(
+	select device_id, 
+	total_signal,
+	location,
+	rank() over( partition by device_id order by total_signal desc) as rk,
+	sum(total_signal) over(partition by device_id) as tol
+	from CTE
+)
 select 
-call_num 
-from call_det_10
+device_id,
+tol as total_signal,
+location
+from CTE2
 where 
-call_type='INC'
-union
-select 
-call_num 
-from call_det_10
-where 
-call_type='OUT'
-) a
-);
+rk=1;
+
 
 ans 2:
 
-select a.call_num from 
-(select call_type,call_num,sum(dur) outsum from call_det where call_type='OUT' 
-group by call_type,call_num) a,
-(select call_type,call_num,sum(dur) insum  from call_det where call_type='INC' 
-group by call_type,call_num) b
- where a.call_num=b.call_num and a.outsum>b.insum;
+with cte as(
+select device_id, sum(nsl) as nsl from (
+select device_id,location, count(*) nsl from testing group by device_id,location) group by device_id
+),
+cte1 as(
+select device_id,location, nsl , rank() over(partition by device_id order by nsl desc) rnk from (
+select device_id,location, count(*) nsl from testing group by device_id,location)
+)
+select cte1.device_id,cte.nsl,cte1.location from cte,cte1 where cte.device_id=cte1.device_id and rnk=1
+;
+
+
+ans 3:
+
+select a.device_id,a.total_signals,b.location from (select distinct(device_id),
+count(device_id) over (partition by device_id order by device_id) total_signals,location from testing) a,
+(select device_id,location,rank() over (PARTITION by device_id order by cnt desc) rnk from
+(select distinct(device_id),
+count(device_id) over (partition by location order by device_id) cnt,location from testing)) b
+where a.location=b.location and b.rnk=1;
