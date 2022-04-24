@@ -1,0 +1,59 @@
+
+
+Write sql query to display groups in which employee salary belongs to.
+
+For e.g. -
+if salary is between 0 and 9999 output=group-0
+If salary is between 10000 and 19999 output=group-1
+If salary is between 20000 and 29999 output =group-2
+And so on ...
+
+create table emp_12(Name varchar(30),salary int);
+
+
+insert into emp_12 values('amit',5000);
+insert into emp_12 values('anil',10000);
+insert into emp_12 values('vijay',12000);
+insert into emp_12 values('yash',24000);
+insert into emp_12 values('ajay',31000);
+insert into emp_12 values('anil',28000);
+
+input table :
+
++-------+--------+
+| Name  | salary |
++-------+--------+
+| amit  |   5000 |
+| anil  |  10000 |
+| vijay |  12000 |
+| yash  |  24000 |
+| ajay  |  31000 |
+| anil  |  28000 |
++-------+--------+
+
+expected output :
++-------+--------+--------------+
+| Name  | Salary | group_number |
++-------+--------+--------------+
+| amit  |   5000 | Group-0      |
+| anil  |  10000 | Group-1      |
+| vijay |  12000 | Group-1      |
+| yash  |  24000 | Group-3      |
+| ajay  |  31000 | Group-3      |
+| anil  |  28000 | Group-3      |
++-------+--------+--------------+
+
+
+Ans:
+
+
+
+select 
+Name,
+Salary,
+case 
+when Salary between 0 and 9999 then 'Group-0'
+when Salary between 10000 and 19999 then 'Group-1'
+else 'Group-3'
+end as group_number
+ from emp_12;
