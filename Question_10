@@ -1,44 +1,94 @@
+SQL_scenario_question Question 11 :
+                         ------------------------------
+                           PROBLEM STATEMENT 
+       write a query to find number who has done both inc & out and sum of duration of out is greater than sum of duration of inc
+                     ------------------------------
 
 
-create table entries (
-name varchar(20),
-address varchar(20),
-email varchar(20),
-floor int,
-resources varchar(10));
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
+create table call_det_10 (
+call_type varchar(21),
+call_num int,
+dur int);
 
-insert into entries
-values ('A','Bangalore','A@gmail.com',1,'CPU'),('A','Bangalore','A1@gmail.com',1,'CPU'),('A','Bangalore','A2@gmail.com',2,'DESKTOP')
-,('B','Bangalore','B@gmail.com',2,'DESKTOP'),('B','Bangalore','B1@gmail.com',2,'DESKTOP'),('B','Bangalore','B2@gmail.com',1,'MONITOR')
+insert into call_det_10 values('OUT',98456,10);
+insert into call_det_10 values('OUT',98456,12);
+insert into call_det_10 values('OUT',98989,5);
+insert into call_det_10 values('INC',12121,7);
+insert into call_det_10 values('INC',98456,14);
+insert into call_det_10 values('INC',98989,8);
+insert into call_det_10 values('SMS',98456,10);
+insert into call_det_10 values('OUT',98452,12);
+insert into call_det_10 values('INC',98982,5);
 
 
-with cte as
+
+ans 1:
+
+
+WITH CTE_FINAL AS
 (
-select name,
-count(address) as total_visit,
-group_concat(resources) as resources_used
-from
- entries
-group by name,address
-)
+	WITH CTE_IN AS(
+		select 
+		call_num,
+		call_type,
+		sum(dur) AS S_IN
+		from 
+		call_det_10
+		where call_type='INC'
+		group by call_num
+	),
+	CTE_OUT AS (
+		select 
+		call_num,
+		call_type,
+		sum(dur) AS S_OUT
+		from 
+		call_det_10
+		where call_type='out'
+		group by call_num
+	)
+	SELECT CTE_OUT.call_num,
+    CTE_OUT.S_OUT,
+    CTE_IN.S_IN
+	from 
+	CTE_IN
+	JOIN
+	CTE_OUT
+	WHERE CTE_IN.CALL_NUM=CTE_OUT.CALL_NUM
+ )   
+SELECT * FROM 
+CTE_FINAL
+where 
+S_OUT>S_IN 
+and 
+call_num in
+(
+SELECT 
+CALL_NUM 
+FROM 
+(
 select 
-b.name,total_visit,b.floor,resources_used
-from
-(
-select name,floor,cou,
-rank() over(partition by name order by cou desc) as rk
-from 
-(
+call_num 
+from call_det_10
+where 
+call_type='INC'
+union
 select 
-name,
-floor,
-count(floor) as cou
-from 
-entries
-group by name,floor
+call_num 
+from call_det_10
+where 
+call_type='OUT'
 ) a
-)b,
-cte
-where rk=1
-and b.name=cte.name
-;
+);
+
+ans 2:
+
+select a.call_num from 
+(select call_type,call_num,sum(dur) outsum from call_det where call_type='OUT' 
+group by call_type,call_num) a,
+(select call_type,call_num,sum(dur) insum  from call_det where call_type='INC' 
+group by call_type,call_num) b
+ where a.call_num=b.call_num and a.outsum>b.insum;
