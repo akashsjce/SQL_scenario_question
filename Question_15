@@ -1,0 +1,50 @@
+use sql_question;
+show tables;
+
+Q1.Write a SQL query to find the overall topper without using window functions,joins and cte.
+
+Create table Student_15(Studid int,NAME varchar(10),Subject varchar(20),marks int);
+insert into Student_15 values(1,'A','Phy','90');
+insert into Student_15 values(1,'A','Che','95');
+insert into Student_15 values(2,'B','Phy','80');
+insert into Student_15 values(2,'B','Che','85');
+insert into Student_15 values(3,'C','Phy','90');
+insert into Student_15 values(4,'D','Phy','75');
+insert into Student_15 values(4,'D','Che','90');
+
+input table :
+----------------------
++--------+------+---------+-------+
+| Studid | NAME | Subject | marks |
++--------+------+---------+-------+
+|      1 | A    | Phy     |    90 |
+|      1 | A    | Che     |    95 |
+|      2 | B    | Phy     |    80 |
+|      2 | B    | Che     |    85 |
+|      3 | C    | Phy     |    90 |
+|      4 | D    | Phy     |    75 |
+|      4 | D    | Che     |    90 |
++--------+------+---------+-------+
+
+
+expected Output:
+A
+
+
+-----------------
+method 1
+------------------
+
+select 
+name 
+from
+(
+	select 
+		Name,
+		sum(marks) as total_marks
+	from 
+		Student_15 S
+	group by Name
+) A
+order by total_marks desc
+limit 1;
