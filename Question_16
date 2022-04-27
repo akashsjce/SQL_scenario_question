@@ -1,0 +1,39 @@
+16) Write a SQL Query to get result as shown in output?
+
+
+create table Data_16( Name varchar(20));
+insert into Data_16 value ('101');
+insert into Data_16 value ('Akash');
+insert into Data_16 value ('Mahindrakar');
+insert into Data_16 value ('Mumbai');
+insert into Data_16 value ('102');
+insert into Data_16 value ('Akshay');
+insert into Data_16 value ('Shirali');
+insert into Data_16 value ('Pune');
+
+
+
+input 
+
++-------------+
+| Name        |
++-------------+
+| 101         |
+| Akash       |
+| Mahindrakar |
+| Mumbai      |
+| 102         |
+| Akshay      |
+| Shirali     |
+| Pune        |
++-------------+
+
+
+Output:
+Id FName LName City
+101 Akash Mahindrakar Mumbai
+102 Akshay Shirali Pune
+
+
+
+
