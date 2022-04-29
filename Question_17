@@ -1,0 +1,78 @@
+Question 4
+
+                                ------------------------------
+                                      PROBLEM STATEMENT 
+                                      
+                        Write SQL to get the most recent / latest balance, and TransactionID for each AccountNumber    
+						
+                                ------------------------------
+
+
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
+create table transactions_17
+	(
+	 accno int,
+	 transaction_time datetime,
+	 transaction_id int,
+	 balance int
+	 );
+     
+      insert into transactions_17 values(550,'2020-05-12 05:29:44.120',1001,2000);
+	 insert into transactions_17 values(550,'2020-05-15 10:29:25.630',1002,8000);
+	 insert into transactions_17 values(460,'2020-03-15 11:29:23.620',1003,9000);
+	 insert into transactions_17 values(460,'2020-04-30 11:29:57.320',1004,7000);
+      insert into transactions_17 values(460,'2020-04-30 12:32:44.223',1005,5000);
+	 insert into transactions_17 values(640,'2020-02-18 06:29:34.420',1006,5000);
+	 insert into transactions_17 values(640,'2020-02-18 06:29:37.120',1007,9000);
+
+---------
+INPUT
+---------
++-------+---------------------+----------------+---------+
+| accno | transaction_time    | transaction_id | balance |
++-------+---------------------+----------------+---------+
+|   550 | 2020-05-12 05:29:44 |           1001 |    2000 |
+|   550 | 2020-05-15 10:29:26 |           1002 |    8000 |
+|   460 | 2020-03-15 11:29:24 |           1003 |    9000 |
+|   460 | 2020-04-30 11:29:57 |           1004 |    7000 |
+|   460 | 2020-04-30 12:32:44 |           1005 |    5000 |
+|   640 | 2020-02-18 06:29:34 |           1006 |    5000 |
+|   640 | 2020-02-18 06:29:37 |           1007 |    9000 |
++-------+---------------------+----------------+---------+
+
+
+---------
+OUTPUT
+---------
+
++-------+---------------------+----------------+---------+
+| accno | transaction_time    | transaction_id | balance |
++-------+---------------------+----------------+---------+
+|   460 | 2020-04-30 12:32:44 |           1005 |    5000 |
+|   550 | 2020-05-15 10:29:26 |           1002 |    8000 |
+|   640 | 2020-02-18 06:29:37 |           1007 |    9000 |
++-------+---------------------+----------------+---------+
+
+
+
+
+                              ------------------------------
+                                solution_4 7/4/2022
+                              ------------------------------
+select 
+accno,
+transaction_time,
+transaction_id,
+balance
+from 
+(
+	select 
+	*,
+	rank() over( partition by accno order by transaction_time desc) as rk 
+	from 
+	transactions_17
+) A
+where 
+rk=1;
