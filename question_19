@@ -1,0 +1,78 @@
+Q 19) Write a sql query to get the population percentage with respect to the state for each city
+ 
+
+CREATE TABLE test_19 (
+      id INT,
+      city TEXT,
+      state TEXT,
+      population INT
+    );
+    
+    INSERT INTO test_19 (id, city, state, population) VALUES (1, "kol", "wb", 40);
+    INSERT INTO test_19 (id,  city, state, population) VALUES (2, "siliguri", "wb", 30);
+    INSERT INTO test_19 (id,  city, state, population) VALUES (3, "malda", "wb", 20);
+    INSERT INTO test_19 (id,  city, state, population) VALUES (4, "darjeeling", "wb", 10);
+    INSERT INTO test_19 (id, city, state, population) VALUES (5, "lucknow", "up", 70);
+    INSERT INTO test_19 (id,  city, state, population) VALUES (6, "meerut", "up", 56);
+    INSERT INTO test_19 (id,  city, state, population) VALUES (7, "noida", "up", 78);
+    INSERT INTO test_19 (id,  city, state, population) VALUES (8, "kanpur", "up", 42);
+    INSERT INTO test_19 (id, city, state, population) VALUES (9,  "mumbai", "maharashtra", 63);
+    INSERT INTO test_19 (id,  city, state, population) VALUES (10, "nagpur", "maharashtra",  45);
+    INSERT INTO test_19 (id,  city, state, population) VALUES (11,  "pune", "maharashtra", 52);
+     INSERT INTO test_19 (id,  city, state, population) VALUES (12, "navi mumbai", "maharashtra",  42);
+     
+
+
+
+---------------------------------------------
+input 
+---------------------------------------------
++------+-------------+-------------+------------+
+| id   | city        | state       | population |
++------+-------------+-------------+------------+
+|    1 | kol         | wb          |         40 |
+|    2 | siliguri    | wb          |         30 |
+|    3 | malda       | wb          |         20 |
+|    4 | darjeeling  | wb          |         10 |
+|    5 | lucknow     | up          |         70 |
+|    6 | meerut      | up          |         56 |
+|    7 | noida       | up          |         78 |
+|    8 | kanpur      | up          |         42 |
+|    9 | mumbai      | maharashtra |         63 |
+|   10 | nagpur      | maharashtra |         45 |
+|   11 | pune        | maharashtra |         52 |
+|   12 | navi mumbai | maharashtra |         42 |
++------+-------------+-------------+------------+
+
+---------------------------------------------
+output 
+---------------------------------------------
+
++-------------+------------+-------------+-----------------------+
+| city        | population | state       | population/totPop*100 |
++-------------+------------+-------------+-----------------------+
+| darjeeling  |         10 | wb          |               10.0000 |
+| malda       |         20 | wb          |               20.0000 |
+| siliguri    |         30 | wb          |               30.0000 |
+| kol         |         40 | wb          |               40.0000 |
+| kanpur      |         42 | up          |               17.0732 |
+| noida       |         78 | up          |               31.7073 |
+| meerut      |         56 | up          |               22.7642 |
+| lucknow     |         70 | up          |               28.4553 |
+| navi mumbai |         42 | maharashtra |               20.7921 |
+| pune        |         52 | maharashtra |               25.7426 |
+| nagpur      |         45 | maharashtra |               22.2772 |
+| mumbai      |         63 | maharashtra |               31.1881 |
++-------------+------------+-------------+-----------------------+
+
+
+ 
+     
+     SELECT city, population, K.state, population/totPop*100 
+  FROM test_19 JOIN 
+     (SELECT P.state, P.totPop FROM 
+        (SELECT state, SUM(population) AS totPop 
+        FROM test_19 
+     GROUP BY state) 
+  AS P) 
+AS K ON test_19.state=K.state;
