@@ -1,0 +1,62 @@
+20)Write SQL to get the total Sales in year 1998,1999 and 2000 for all the products as shown below.
+
+
+create table salestbl_20 (
+id int identity (1,1), 
+product varchar(20), 
+salesyear int, 
+QuantitySold int)
+
+insert into salestbl_20 (product, salesyear, QuantitySold)
+values ('Laptop', 1998, 2500), 
+('Laptop', 1999, 3600),
+('Laptop', 2000, 4200),
+('Keyboard', 1998, 2300), 
+('Keyboard',1999, 3600), 
+('Keyboard', 2000, 5000),
+('Mouse', 1998, 6000),
+('Mouse', 1999, 3400), 
+('Mouse', 2000, 4600)  
+
+
+------------
+input 
+-------------
++------+----------+-----------+--------------+
+| id   | product  | salesyear | QuantitySold |
++------+----------+-----------+--------------+
+| NULL | Laptop   |      1998 |         2500 |
+| NULL | Laptop   |      1999 |         3600 |
+| NULL | Laptop   |      2000 |         4200 |
+| NULL | Keyboard |      1998 |         2300 |
+| NULL | Keyboard |      1999 |         3600 |
+| NULL | Keyboard |      2000 |         5000 |
+| NULL | Mouse    |      1998 |         6000 |
+| NULL | Mouse    |      1999 |         3400 |
+| NULL | Mouse    |      2000 |         4600 |
++------+----------+-----------+--------------+
+
+
+
+------------
+Output  
+-------------
+
++------------+-------+-------+-------+
+| TotalSales | 1998  | 1999  | 2000  |
++------------+-------+-------+-------+
+| TotalSales | 10800 | 10600 | 13800 |
++------------+-------+-------+-------+
+
+
+
+
+
+
+
+
+select 'TotalSales' as TotalSales, 
+sum(case when SalesYear=1998 then QuantitySold end) as "1998" ,
+sum(case when SalesYear=1999 then QuantitySold end) as "1999",
+sum(case when SalesYear=2000 then QuantitySold end) as "2000"
+from salestbl_20
