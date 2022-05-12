@@ -1,0 +1,60 @@
+23)  Write SQL to turn the columns English, Maths and Science into rows. It should display Marks for each student for each subjects as shown below
+
+
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
+Create Table studentinfo_23(
+studentname Varchar(20),
+english int,
+maths int,
+science int);
+
+insert into studentinfo_23 values ('David',85,90,88);
+insert into studentinfo_23 values ('John',75,85,80);
+insert into studentinfo_23 values ('Tom',83,80,92);
+
+------------
+Input 
+------------
+
++-------------+---------+-------+---------+
+| studentname | english | maths | science |
++-------------+---------+-------+---------+
+| David       |      85 |    90 |      88 |
+| John        |      75 |    85 |      80 |
+| Tom         |      83 |    80 |      92 |
++-------------+---------+-------+---------+
+
+
+------------
+Output 
+------------
++-------------+---------+-------+
+| StudentName | Subject | Marks |
++-------------+---------+-------+
+| David       | English |    85 |
+| David       | Maths   |    90 |
+| David       | Science |    88 |
+| John        | English |    75 |
+| John        | Maths   |    85 |
+| John        | Science |    80 |
+| Tom         | English |    83 |
+| Tom         | Maths   |    80 |
+| Tom         | Science |    92 |
++-------------+---------+-------+
+
+
+-----------
+Method 1:
+-----------
+select StudentName, 'English' As Subject ,English as Marks from studentinfo_23
+union all 
+select StudentName, 'Maths' As Subject ,Maths as Marks from studentinfo_23
+union all 
+select StudentName, 'Science' As Subject ,Science as Marks from studentinfo_23
+order by StudentName;
+
+
+
+
