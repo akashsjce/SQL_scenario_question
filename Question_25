@@ -1,0 +1,84 @@
+
+25)Write SQL to derive Start_Date and End_Date column when there is continuous amount in Balance column as shown below.
+
+Create Table BalanceTbl_25(
+Balance int,
+Dates Date
+)
+
+Insert into BalanceTbl_25 Values(26000,'2020-01-01')
+Insert into BalanceTbl_25 Values(26000,'2020-01-02')
+Insert into BalanceTbl_25 Values(26000,'2020-01-03')
+Insert into BalanceTbl_25 Values(30000,'2020-01-04')
+Insert into BalanceTbl_25 Values(30000,'2020-01-05')
+Insert into BalanceTbl_25 Values(26000,'2020-01-06')
+Insert into BalanceTbl_25 Values(26000,'2020-01-07')
+Insert into BalanceTbl_25 Values(32000,'2020-01-08')
+Insert into BalanceTbl_25 Values(31000,'2020-01-09')
+
+---------
+Input 
+---------
+
++---------+------------+
+| Balance | Dates      |
++---------+------------+
+|   26000 | 2020-01-01 |
+|   26000 | 2020-01-02 |
+|   26000 | 2020-01-03 |
+|   30000 | 2020-01-04 |
+|   30000 | 2020-01-05 |
+|   26000 | 2020-01-06 |
+|   26000 | 2020-01-07 |
+|   32000 | 2020-01-08 |
+|   31000 | 2020-01-09 |
++---------+------------+
+
+---------
+output
+---------
++---------+------------+------------+
+| Balance | StartDate  | EndDate    |
++---------+------------+------------+
+|   26000 | 2020-01-01 | 2020-01-03 |
+|   30000 | 2020-01-04 | 2020-01-05 |
+|   26000 | 2020-01-06 | 2020-01-07 |
+|   32000 | 2020-01-08 | 2020-01-08 |
+|   31000 | 2020-01-09 | 2020-01-09 |
++---------+------------+------------+
+
+
+
+---------
+Method 1:
+---------
+
+with cte as
+(
+select *, (rownum2 - rownum1) as Diff from
+(
+select *, ROW_NUMBER() over (partition by balance order by dates) as rownum1 ,
+ROW_NUMBER() over (order by dates) as rownum2
+from BalanceTbl_25
+
+)res
+)
+select balance, min(dates) as StartDate, max(dates) as EndDate
+from cte
+group by balance,diff
+order by StartDate;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
