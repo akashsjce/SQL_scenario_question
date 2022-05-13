@@ -1,0 +1,35 @@
+Problem Statements :- Write SQL to find all couples of trade for same stock that happened in the range of 10 seconds and having 
+price difference by more than 10 %. Output result should also list the percentage of price difference between the 2 trade
+
+Create Table Trade_tbl_24(
+TRADE_ID varchar(20),
+Trade_Timestamp time,
+Trade_Stock varchar(20),
+Quantity int,
+Price Float
+)
+
+Insert into Trade_tbl_24 Values('TRADE1','10:01:05','RIL',100,20)
+Insert into Trade_tbl_24 Values('TRADE2','10:01:06','RIL',20,15)
+Insert into Trade_tbl_24 Values('TRADE3','10:01:08','RIL',150,30)
+Insert into Trade_tbl_24 Values('TRADE4','10:01:09','RIL',300,32)
+Insert into Trade_tbl_24 Values('TRADE5','10:10:00','RIL',-100,19)
+Insert into Trade_tbl_24 Values('TRADE6','10:10:01','RIL',-300,19)
+
+----------
+Input
+----------
++----------+-----------------+-------------+----------+-------+
+| TRADE_ID | Trade_Timestamp | Trade_Stock | Quantity | Price |
++----------+-----------------+-------------+----------+-------+
+| TRADE1   | 10:01:05        | RIL         |      100 |    20 |
+| TRADE2   | 10:01:06        | RIL         |       20 |    15 |
+| TRADE3   | 10:01:08        | RIL         |      150 |    30 |
+| TRADE4   | 10:01:09        | RIL         |      300 |    32 |
+| TRADE5   | 10:10:00        | RIL         |     -100 |    19 |
+| TRADE6   | 10:10:01        | RIL         |     -300 |    19 |
++----------+-----------------+-------------+----------+-------+
+
+----------
+output 
+----------
