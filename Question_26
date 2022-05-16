@@ -73,3 +73,12 @@ Expected output
 | 2020-01-17 |                 270.0000047683716 |
 +------------+-----------------------------------+
 
+
+
+SELECT Sales_Date, SUM(Sales_Amount * Exchange_Rate) FROM Sales_Table_26 s
+LEFT JOIN ExchangeRate_Table_26 e1 
+ON s.Currency = e1.Source_Currency 
+AND e1.Effective_Start_Date = 
+			(select MAX(e2.Effective_Start_Date) FROM ExchangeRate_Table_26 e2 WHERE s.Currency = e2.Source_Currency
+			AND s.Sales_Date >= e2.Effective_Start_Date)
+GROUP BY Sales_Date
