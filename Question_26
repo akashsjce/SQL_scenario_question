@@ -1,0 +1,75 @@
+
+Question 1
+
+                                ------------------------------
+                                      PROBLEM STATEMENT              
+          Write SQL to get Total  sales amount in USD for each sales date as shown below :-             
+                                ------------------------------
+
+-------------------------------------------------------------------------
+Table and Insert SQL Script :
+-------------------------------------------------------------------------
+
+Create Table Sales_Table_26(
+Sales_Date Date,
+Sales_Amount Bigint,
+Currency Varchar(10)
+)
+
+INSERT INTO Sales_Table_26 Values ('2020-01-01',500,'INR');
+INSERT INTO Sales_Table_26 Values ('2020-01-01',100,'GBP');
+INSERT INTO Sales_Table_26 Values ('2020-01-02',1000,'INR');
+INSERT INTO Sales_Table_26 Values ('2020-01-02',500,'GBP');
+INSERT INTO Sales_Table_26 Values ('2020-01-03',500,'INR');
+INSERT INTO Sales_Table_26 Values ('2020-01-17',200,'GBP');
+
+CREATE TABLE ExchangeRate_Table_26
+(
+ Source_Currency varchar(10) ,
+ Target_Currency varchar(10),
+ Exchange_Rate float,
+ Effective_Start_Date date
+) 
+
+INSERT ExchangeRate_Table_26 VALUES ('INR','USD', 0.014,'2019-12-31')
+INSERT ExchangeRate_Table_26 VALUES ('INR','USD', 0.015,'2020-01-02')
+INSERT ExchangeRate_Table_26 VALUES ('GBP','USD', 1.32, '2019-12-20')
+INSERT ExchangeRate_Table_26 VALUES ('GBP','USD', 1.3, '2020-01-01' )
+INSERT ExchangeRate_Table_26 VALUES ('GBP','USD', 1.35, '2020-01-16')
+
+input 
+------------
+
++-----------------+-----------------+---------------+----------------------+
+| Source_Currency | Target_Currency | Exchange_Rate | Effective_Start_Date |
++-----------------+-----------------+---------------+----------------------+
+| INR             | USD             |         0.014 | 2019-12-31           |
+| INR             | USD             |         0.015 | 2020-01-02           |
+| GBP             | USD             |          1.32 | 2019-12-20           |
+| GBP             | USD             |           1.3 | 2020-01-01           |
+| GBP             | USD             |          1.35 | 2020-01-16           |
++-----------------+-----------------+---------------+----------------------+
+
+
++-----------------+-----------------+---------------+----------------------+
+| Source_Currency | Target_Currency | Exchange_Rate | Effective_Start_Date |
++-----------------+-----------------+---------------+----------------------+
+| INR             | USD             |         0.014 | 2019-12-31           |
+| INR             | USD             |         0.015 | 2020-01-02           |
+| GBP             | USD             |          1.32 | 2019-12-20           |
+| GBP             | USD             |           1.3 | 2020-01-01           |
+| GBP             | USD             |          1.35 | 2020-01-16           |
++-----------------+-----------------+---------------+----------------------+
+
+Expected output 
+----------------
+
++------------+-----------------------------------+
+| Sales_Date | SUM(Sales_Amount * Exchange_Rate) |
++------------+-----------------------------------+
+| 2020-01-01 |                136.99999544769526 |
+| 2020-01-02 |                  664.999975822866 |
+| 2020-01-03 |                 7.499999832361937 |
+| 2020-01-17 |                 270.0000047683716 |
++------------+-----------------------------------+
+
